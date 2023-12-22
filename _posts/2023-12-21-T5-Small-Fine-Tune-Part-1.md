@@ -14,8 +14,9 @@ This post is one of a series of posts on how to fine-tune a model.
 - Evaluate and reiterate until we get the best results ***(Size is essential, not always)***
 
 ## The Search
-As the plan was clear and with the first step, I started my journey of hugging faces to find a model that already does that. I give it some text, and it returns with a hex colour or any colour representation.
-After a couple of hours, it seemed that it wasn't an easy ask; I wasn't able to find a model that specialized in that sort of task ***(Is it color or colour)***
+As the plan was clear and with the first step, I started my journey of hugging faces to find a model that already does that. I give it some text, and it returns with a hex colour or any colour representation. After a couple of hours, it seemed that it wasn't an easy ask; I wasn't able to find a model that specialized in that sort of task ***(Is it color or colour)***
+
+That means we need to find a generic model that can be used to finetune it towards the task. The criteria for picking a model are that it should be small and it contains enough data to be able to tokenize the input and label, [t5-small](https://huggingface.co/t5-small) will the picked model to start with. The next step will be to collect/find the data used in the training process.
 
 ## The Data
 The second step was to find data if a model still needed to exist to start the finetuning process. Again, it was not an easy task; as I was looking for text to 4 hex colours, I wasn't able to find such data on hugging faces or in my search in general. So I rolled my sleeves, headed to a chatbot, and asked, `Suggest a dataset to finetune an LLM to provide 4 colours when given a palette name,` here was the output.
@@ -147,6 +148,17 @@ training_args = Seq2SeqTrainingArguments(
 ```
 In this config, we are storing the output in the `results` folder, saving every `epoch`, and our batch size will be `32`, our training epochs will be `10`, and we are saving the best model at the end using the `rouge1` metric. 
 
+We will then load the base model we will finetune, this snippet will load the base model and tokenizer.
+
+```python
+
+modelId = "t5-small"
+tokenizer = AutoTokenizer.from_pretrained(modelId) 
+model = T5ForConditionalGeneration.from_pretrained(modelId)
+data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model)
+
+```
+
 After the config, we will start the training process
 ```python 
 trainer = Seq2SeqTrainer (
@@ -171,7 +183,7 @@ model.save_pretrained(saved_dir)
 ```
 
 ## Testing
-Testing this model has shown that the model was able to generate four hex colors, it is a good start but it was showing a lot of consufsion and bais toward certain colors and always repeating colors in the output. 
+Testing this model has shown that the model was able to generate four hex colours. It is a good start, but it was showing a lot of confusion and bais toward certain colours and always repeating colours in the output. 
 
 ```python
 
@@ -188,4 +200,4 @@ instruct_model_text_output = tokenizer.decode(instruct_model_outputs[0], skip_sp
 print(instruct_model_text_output) #ffffff #ffffff #ffffff #e2e2ee
 ```
 
-In the next part of these series we will go over how to refine the process and improve the results.
+In the next part of this series, we will go over how to refine the process and improve the results.

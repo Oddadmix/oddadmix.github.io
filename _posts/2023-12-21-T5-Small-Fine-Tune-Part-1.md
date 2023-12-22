@@ -16,10 +16,10 @@ This post is one of a series of posts on how to fine-tune a model.
 ## The Search
 As the plan was clear and with the first step, I started my journey of hugging faces to find a model that already does that. I give it some text, and it returns with a hex colour or any colour representation. After a couple of hours, it seemed that it wasn't an easy ask; I wasn't able to find a model that specialized in that sort of task ***(Is it color or colour)***
 
-That means we need to find a generic model that can be used to finetune it towards the task. The criteria for picking a model are that it should be small and it contains enough data to be able to tokenize the input and label, [t5-small](https://huggingface.co/t5-small) will the picked model to start with. The next step will be to collect/find the data used in the training process.
+That means we need to find a generic model that can be used to finetune it towards the task. The criteria for picking a model are that it should be small and contain enough data to tokenize the input and label; [t5-small](https://huggingface.co/t5-small) will be the picked model. The next step will be to collect/find the data used in the training process.
 
 ## The Data
-The second step was to find data if a model still needed to exist to start the finetuning process. Again, it was not an easy task; as I was looking for text to 4 hex colours, I wasn't able to find such data on hugging faces or in my search in general. So I rolled my sleeves, headed to a chatbot, and asked, `Suggest a dataset to finetune an LLM to provide 4 colours when given a palette name,` here was the output.
+The second step was to find data if a model still needed to exist to start the finetuning process. Again, it was not an easy task; as I was looking for text to 4 hex colours, I couldn't find such data on hugging faces or in my search in general. So I rolled my sleeves, headed to a chatbot, and asked, `Suggest a dataset to finetune an LLM to provide 4 colours when given a palette name,` here was the output.
 ```
 | Palette Name    | Color 1    | Color 2    | Color 3    | Color 4    |
 |-----------------|------------|------------|------------|------------|
